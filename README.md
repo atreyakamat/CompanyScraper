@@ -1,53 +1,83 @@
-# Company Scraper Framework 2.0 (Pro)
+# Company Scraper Framework 2.5 (Pro)
 
-A modular, production-grade CLI framework for scraping job and company data with stealth capabilities and Docker support.
+A modular, production-grade market intelligence platform for scraping, visualizing, and monitoring job and company data with high-end stealth and automation.
 
-## New Pro Features
-- **Stealth Mode:** Uses `playwright-extra` and `stealth` plugins to evade bot detection.
-- **Data Quality:** Automatically parses relative dates (e.g., "4 days ago" -> "2026-02-27") and removes duplicate listings.
-- **Dockerized:** Run the scraper in any environment without installing Node or Playwright manually.
+## 🚀 Pro Platform Features
+- **Modern Dashboard:** Built with Next.js, Tailwind, and Recharts for real-time market visualization.
+- **Automated Monitoring:** Background scheduler via `node-cron` to track markets like Bangalore, Pune, and Hyderabad daily.
+- **Stealth Mode:** Advanced bot evasion using `playwright-extra` and stealth plugins.
+- **Data Quality:** Automatic date parsing and duplicate filtering for clean lead generation.
+- **Company Intelligence:** Captures company profile links for deep dive research.
 
-## Installation (Local)
+## 🛠️ Installation & Setup
+
+### 1. Local Environment
 ```bash
+# Install core dependencies
 npm install
+
+# Install dashboard dependencies
+cd dashboard && npm install && cd ..
+
+# Install scraping browser
 npx playwright install chromium
 ```
 
-## Docker Usage
-
-### 1. Build the Image
+### 2. Docker
 ```bash
 docker build -t companyscraper .
-```
-
-### 2. Run the Scraper
-The output CSV will be saved in the container. To get the file out, map a volume to your local machine:
-```bash
-# Windows (PowerShell)
 docker run -v ${PWD}:/usr/src/app companyscraper scrape -s startupgoa -r "Software Engineer"
 ```
 
-## Command Line Usage
+## 🖥️ Running the Platform
 
-| Flag | Name | Description | Example |
-|------|------|-------------|---------|
-| `-s` | `--source` | The website to scrape. | `startupgoa`, `linkedin`, `indeed` |
-| `-r` | `--role`   | The job role or keywords. | `"Software Developer"` |
-| `-l` | `--location`| The city or region. | `"Pune"`, `"Bangalore"` |
-| `-o` | `--output` | Custom filename for CSV. | `"results.csv"` |
+### 📊 Launch the Intelligence Dashboard
+Visualize your data, track top hiring locations, and search listings.
+```bash
+npm run dashboard
+# Open http://localhost:3000
+```
 
-### Quick Examples
-- **Startup Goa:** `node index.js scrape -s startupgoa -r "Software Engineer"`
-- **LinkedIn (Pune):** `node index.js scrape -s linkedin -r "React Developer" -l "Pune"`
-- **Indeed (Bangalore):** `node index.js scrape -s indeed -r "Data Analyst" -l "Bangalore"`
+### 🕒 Start Automated Monitoring
+Runs your pre-configured scrapes in the background based on `config.json`.
+```bash
+npm run scheduler
+```
 
-## Supported Sources Status
+### 🔍 Manual CLI Scrapes
+Use the command line for targeted, one-off searches.
+```bash
+# General Syntax
+npm run scrape -- -s [source] -r "[role]" -l "[location]"
 
-| Source | Status | Notes |
-|--------|--------|-------|
-| **Startup Goa** | ✅ Fully Operational | Scrapes all details including "Load More" expansion. |
-| **LinkedIn** | ✅ Operational (Guest) | Scrapes public guest search. Limited by LinkedIn session walls. |
-| **Indeed** | ✅ Operational | Scrapes India results (in.indeed.com). |
+# Examples
+npm run scrape -- -s linkedin -r "React Developer" -l "Pune"
+npm run scrape -- -s indeed -r "Data Scientist" -l "Bangalore"
+```
 
-## Maintenance & Extension
-To add more sites, create a new scraper in the `scrapers/` folder and register it in `index.js`. All new scrapers should ideally use the `stealth` plugin and `parseRelativeDate` utility for consistency.
+## ⚙️ Configuration (`config.json`)
+Manage your automated monitoring toggles and search parameters:
+```json
+{
+  "scheduler": {
+    "enabled": true,
+    "schedule": "0 9 * * *",
+    "sources": [
+      { "name": "indeed", "role": "Software Developer", "location": "Bangalore" },
+      { "name": "indeed", "role": "Software Developer", "location": "Hyderabad" }
+    ]
+  }
+}
+```
+
+## 🔍 Supported Sources Status
+
+| Source | Status | Features |
+|--------|--------|----------|
+| **Startup Goa** | ✅ Fully Operational | Full expansion + Company Profile Links |
+| **LinkedIn** | ✅ Operational (Guest) | Stealth public search (Pune, Bangalore, etc.) |
+| **Indeed** | ✅ Operational | Indian Market specialization (in.indeed.com) |
+
+## 🛠️ Developer Guide
+1. **Adding Sources:** Create a script in `scrapers/`, implement `scrape(role, location, fileName)`, and register in `index.js`.
+2. **Extending Dashboard:** Update `dashboard/src/app/page.tsx` for new charts or filter views.

@@ -1,0 +1,13 @@
+{
+  "scheduler": {
+    "enabled": true,
+    "schedule": "0 9 * * *",
+    "sources": [
+      { "name": "startupgoa", "role": "Software Developer" },
+      { "name": "indeed", "role": "Software Developer", "location": "Bangalore" },
+      { "name": "indeed", "role": "Software Developer", "location": "Hyderabad" },
+      { "name": "indeed", "role": "Software Developer", "location": "Pune" },
+      { "name": "linkedin", "role": "Software Developer", "location": "Bangalore" }
+    ]
+  }
+}
