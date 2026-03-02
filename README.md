@@ -33,12 +33,21 @@ docker run -v ${PWD}:/usr/src/app companyscraper scrape -s startupgoa -r "Softwa
 |------|------|-------------|---------|
 | `-s` | `--source` | The website to scrape. | `startupgoa`, `linkedin`, `indeed` |
 | `-r` | `--role`   | The job role or keywords. | `"Software Developer"` |
+| `-l` | `--location`| The city or region. | `"Pune"`, `"Bangalore"` |
 | `-o` | `--output` | Custom filename for CSV. | `"results.csv"` |
 
-### Quick Example
-```bash
-node index.js scrape -s startupgoa -r "Data Analyst"
-```
+### Quick Examples
+- **Startup Goa:** `node index.js scrape -s startupgoa -r "Software Engineer"`
+- **LinkedIn (Pune):** `node index.js scrape -s linkedin -r "React Developer" -l "Pune"`
+- **Indeed (Bangalore):** `node index.js scrape -s indeed -r "Data Analyst" -l "Bangalore"`
+
+## Supported Sources Status
+
+| Source | Status | Notes |
+|--------|--------|-------|
+| **Startup Goa** | ✅ Fully Operational | Scrapes all details including "Load More" expansion. |
+| **LinkedIn** | ✅ Operational (Guest) | Scrapes public guest search. Limited by LinkedIn session walls. |
+| **Indeed** | ✅ Operational | Scrapes India results (in.indeed.com). |
 
 ## Maintenance & Extension
 To add more sites, create a new scraper in the `scrapers/` folder and register it in `index.js`. All new scrapers should ideally use the `stealth` plugin and `parseRelativeDate` utility for consistency.
