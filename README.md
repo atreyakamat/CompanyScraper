@@ -1,70 +1,44 @@
-# Company Scraper Framework 2.0
+# Company Scraper Framework 2.0 (Pro)
 
-A modular, extensible CLI framework for scraping job and company data from multiple sources like Startup Goa, LinkedIn, and Indeed.
+A modular, production-grade CLI framework for scraping job and company data with stealth capabilities and Docker support.
 
-## Prerequisites
-- **Node.js**: (v16 or higher recommended)
-- **NPM**: (comes with Node.js)
+## New Pro Features
+- **Stealth Mode:** Uses `playwright-extra` and `stealth` plugins to evade bot detection.
+- **Data Quality:** Automatically parses relative dates (e.g., "4 days ago" -> "2026-02-27") and removes duplicate listings.
+- **Dockerized:** Run the scraper in any environment without installing Node or Playwright manually.
 
-## Installation Guide
+## Installation (Local)
+```bash
+npm install
+npx playwright install chromium
+```
 
-1. **Clone or copy the project files.**
-2. **Install the required packages:**
-   ```bash
-   npm install
-   ```
-3. **Download the browser for scraping:**
-   ```bash
-   npx playwright install chromium
-   ```
+## Docker Usage
+
+### 1. Build the Image
+```bash
+docker build -t companyscraper .
+```
+
+### 2. Run the Scraper
+The output CSV will be saved in the container. To get the file out, map a volume to your local machine:
+```bash
+# Windows (PowerShell)
+docker run -v ${PWD}:/usr/src/app companyscraper scrape -s startupgoa -r "Software Engineer"
+```
 
 ## Command Line Usage
 
-The framework uses the `scrape` command with several flags:
-
 | Flag | Name | Description | Example |
 |------|------|-------------|---------|
-| `-s` | `--source` | The website to scrape (Required). | `startupgoa`, `linkedin`, `indeed` |
-| `-r` | `--role`   | The job role or keywords to search for. | `"Software Developer"`, `"Designer"` |
-| `-o` | `--output` | Custom filename for the CSV output. | `"my_jobs.csv"` |
+| `-s` | `--source` | The website to scrape. | `startupgoa`, `linkedin`, `indeed` |
+| `-r` | `--role`   | The job role or keywords. | `"Software Developer"` |
+| `-o` | `--output` | Custom filename for CSV. | `"results.csv"` |
 
-### Quick Examples
+### Quick Example
+```bash
+node index.js scrape -s startupgoa -r "Data Analyst"
+```
 
-- **Scrape all jobs from Startup Goa:**
-  ```bash
-  node index.js scrape -s startupgoa
-  ```
-
-- **Scrape a specific role from Startup Goa and save to custom file:**
-  ```bash
-  node index.js scrape -s startupgoa -r "Product Manager" -o "pm_jobs.csv"
-  ```
-
-- **Generate search links for LinkedIn or Indeed:**
-  ```bash
-  node index.js scrape -s linkedin -r "React Developer"
-  ```
-
-## Supported Sources Status
-
-| Source | Status | Notes |
-|--------|--------|-------|
-| **Startup Goa** | ✅ Fully Operational | Scrapes all details including "Load More" expansion. |
-| **LinkedIn** | ⚠️ In Progress | Generates Search URL. Full scraping requires session handling due to high bot protection. |
-| **Indeed** | ⚠️ In Progress | Generates Search URL. Requires cookie/session handling. |
-
-## Developer Guide: Adding a New Source
-
-The framework is designed to be easily expandable:
-
-1.  **Create a scraper file**: Add a new file in the `scrapers/` folder (e.g., `scrapers/mywebsite.js`).
-2.  **Implement logic**: Export a `scrape(role, fileName)` function that uses Playwright.
-3.  **Register the source**: Open `index.js` and add your new source to the `switch` statement:
-    ```javascript
-    case 'mywebsite':
-      await myWebsite.scrape(role, fileName);
-      break;
-    ```
-
-## Maintenance & Updates
-If a website changes its structure, you only need to update the specific file inside the `scrapers/` directory.
+## Maintenance & Extension
+To add more sites, create a new scraper in the `scrapers/` folder and register it in `index.js`. All new scrapers should ideally use the `stealth` plugin and `parseRelativeDate` utility for consistency.
