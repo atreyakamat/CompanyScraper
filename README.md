@@ -1,13 +1,14 @@
-# Company Scraper Framework 2.5 (Pro)
+# Company Scraper Framework 2.6 (Intelligence Edition)
 
-A modular, production-grade market intelligence platform for scraping, visualizing, and monitoring job and company data with high-end stealth and automation.
+A modular, production-grade market intelligence platform for scraping, visualizing, and monitoring job and company data with high-end stealth and automation. Now featuring **Intelligent Email Fetching**.
 
 ## 🚀 Pro Platform Features
+- **Intelligent Email Fetching:** Automatically finds and enriches company contact details using AI-driven search.
+- **Automated City Scrapes:** One-click automation for primary hubs (Pune, Hyderabad, Bengaluru).
+- **Interactive Menu:** Quick-access CLI menu for selecting roles and locations.
 - **Modern Dashboard:** Built with Next.js, Tailwind, and Recharts for real-time market visualization.
-- **Automated Monitoring:** Background scheduler via `node-cron` to track markets like Bangalore, Pune, and Hyderabad daily.
 - **Stealth Mode:** Advanced bot evasion using `playwright-extra` and stealth plugins.
-- **Data Quality:** Automatic date parsing and duplicate filtering for clean lead generation.
-- **Company Intelligence:** Captures company profile links for deep dive research.
+- **Data Quality:** Automatic date parsing and deduplication for clean lead generation.
 
 ## 🛠️ Installation & Setup
 
@@ -26,10 +27,22 @@ npx playwright install chromium
 ### 2. Docker
 ```bash
 docker build -t companyscraper .
-docker run -v ${PWD}:/usr/src/app companyscraper scrape -s startupgoa -r "Software Engineer"
+docker run -v ${PWD}:/usr/src/app companyscraper auto
 ```
 
 ## 🖥️ Running the Platform
+
+### 🤖 Automated Scrape & Intelligence (New)
+Run the fully automated cycle for Pune, Hyderabad, and Bengaluru.
+```bash
+node index.js auto --role "Software Developer"
+```
+
+### 📱 Interactive Menu (New)
+Select from common locations and roles via a guided CLI interface.
+```bash
+node index.js menu
+```
 
 ### 📊 Launch the Intelligence Dashboard
 Visualize your data, track top hiring locations, and search listings.
@@ -38,21 +51,13 @@ npm run dashboard
 # Open http://localhost:3000
 ```
 
-### 🕒 Start Automated Monitoring
-Runs your pre-configured scrapes in the background based on `config.json`.
-```bash
-npm run scheduler
-```
-
 ### 🔍 Manual CLI Scrapes
-Use the command line for targeted, one-off searches.
 ```bash
 # General Syntax
-npm run scrape -- -s [source] -r "[role]" -l "[location]"
+node index.js scrape -s [source] -r "[role]" -l "[location]"
 
 # Examples
-npm run scrape -- -s linkedin -r "React Developer" -l "Pune"
-npm run scrape -- -s indeed -r "Data Scientist" -l "Bangalore"
+node index.js scrape -s indeed -r "Frontend Developer" -l "Pune"
 ```
 
 ## ⚙️ Configuration (`config.json`)
@@ -74,10 +79,10 @@ Manage your automated monitoring toggles and search parameters:
 
 | Source | Status | Features |
 |--------|--------|----------|
+| **Indeed** | ✅ Fully Operational | Indian Market specialization + Email Fetching |
 | **Startup Goa** | ✅ Fully Operational | Full expansion + Company Profile Links |
 | **LinkedIn** | ✅ Operational (Guest) | Stealth public search (Pune, Bangalore, etc.) |
-| **Indeed** | ✅ Operational | Indian Market specialization (in.indeed.com) |
 
 ## 🛠️ Developer Guide
 1. **Adding Sources:** Create a script in `scrapers/`, implement `scrape(role, location, fileName)`, and register in `index.js`.
-2. **Extending Dashboard:** Update `dashboard/src/app/page.tsx` for new charts or filter views.
+2. **Email Intelligence:** The `email` field is populated by the intelligence layer; ensure your scraper includes this field in the CSV header.

@@ -45,11 +45,12 @@ async function scrape(role = '', fileName = 'startupgoa_jobs.csv') {
       return elements.map(el => ({
         title: el.querySelector('.position h3')?.innerText.trim() || 'N/A',
         company: el.querySelector('.company strong')?.innerText.trim() || 'N/A',
-        companyProfile: el.querySelector('.company a')?.href || 'N/A', // Capturing company profile link
+        companyProfile: el.querySelector('.company a')?.href || 'N/A',
         location: el.querySelector('.location')?.innerText.trim() || 'N/A',
         type: el.querySelector('.job-type')?.innerText.trim() || 'N/A',
         date: el.querySelector('.date date')?.innerText.trim() || 'N/A',
-        link: el.querySelector('.position a')?.href || 'N/A'
+        link: el.querySelector('.position a')?.href || 'N/A',
+        email: 'N/A' // Placeholder for automation step
       }));
     });
 
@@ -62,7 +63,7 @@ async function scrape(role = '', fileName = 'startupgoa_jobs.csv') {
         seenLinks.add(job.link);
         uniqueJobs.push({
           ...job,
-          date: parseRelativeDate(job.date) // Use our new date parser
+          date: parseRelativeDate(job.date)
         });
       }
     }
@@ -73,11 +74,12 @@ async function scrape(role = '', fileName = 'startupgoa_jobs.csv') {
         header: [
           { id: 'title', title: 'Job Title' },
           { id: 'company', title: 'Company' },
-          { id: 'companyProfile', title: 'Company Profile' }, // Added to CSV header
+          { id: 'companyProfile', title: 'Company Profile' },
           { id: 'location', title: 'Location' },
           { id: 'type', title: 'Job Type' },
           { id: 'date', title: 'Date Posted (Parsed)' },
-          { id: 'link', title: 'Job Link' }
+          { id: 'link', title: 'Job Link' },
+          { id: 'email', title: 'Company Email' }
         ]
       });
       await csvWriter.writeRecords(uniqueJobs);

@@ -36,7 +36,8 @@ async function scrape(role = '', location = '', fileName = 'indeed_jobs.csv') {
           location: locationEl ? locationEl.innerText.trim() : 'N/A',
           type: 'N/A', 
           date: 'N/A', 
-          link: linkEl ? `https://in.indeed.com${linkEl.getAttribute('href')}` : 'N/A'
+          link: linkEl ? `https://in.indeed.com${linkEl.getAttribute('href')}` : 'N/A',
+          email: 'N/A'
         };
       });
     });
@@ -50,7 +51,8 @@ async function scrape(role = '', location = '', fileName = 'indeed_jobs.csv') {
           { id: 'location', title: 'Location' },
           { id: 'type', title: 'Job Type' },
           { id: 'date', title: 'Date Posted' },
-          { id: 'link', title: 'Job Link' }
+          { id: 'link', title: 'Job Link' },
+          { id: 'email', title: 'Company Email' }
         ]
       });
       await csvWriter.writeRecords(jobs);

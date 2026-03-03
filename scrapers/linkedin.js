@@ -35,9 +35,10 @@ async function scrape(role = '', location = '', fileName = 'linkedin_jobs.csv') 
         title: el.querySelector('.base-search-card__title')?.innerText.trim() || 'N/A',
         company: el.querySelector('.base-search-card__subtitle a')?.innerText.trim() || 'N/A',
         location: el.querySelector('.job-search-card__location')?.innerText.trim() || 'N/A',
-        type: 'N/A', // Not always on the card
+        type: 'N/A',
         date: el.querySelector('time')?.innerText.trim() || 'N/A',
-        link: el.querySelector('.base-card__full-link')?.href || 'N/A'
+        link: el.querySelector('.base-card__full-link')?.href || 'N/A',
+        email: 'N/A'
       }));
     });
 
@@ -50,7 +51,8 @@ async function scrape(role = '', location = '', fileName = 'linkedin_jobs.csv') 
           { id: 'location', title: 'Location' },
           { id: 'type', title: 'Job Type' },
           { id: 'date', title: 'Date Posted' },
-          { id: 'link', title: 'Job Link' }
+          { id: 'link', title: 'Job Link' },
+          { id: 'email', title: 'Company Email' }
         ]
       });
       await csvWriter.writeRecords(jobs);
