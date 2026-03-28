@@ -1,0 +1,13 @@
+{
+  "ui": {
+    "footer": {
+      "hideContextPercentage": false
+    },
+    "autoThemeSwitching": false
+  },
+  "general": {
+    "sessionRetention": {
+      "maxAge": "30d"
+    }
+  }
+}

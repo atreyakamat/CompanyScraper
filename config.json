@@ -7,7 +7,19 @@
       { "name": "indeed", "role": "Software Developer", "location": "Bangalore" },
       { "name": "indeed", "role": "Software Developer", "location": "Hyderabad" },
       { "name": "indeed", "role": "Software Developer", "location": "Pune" },
-      { "name": "linkedin", "role": "Software Developer", "location": "Bangalore" }
+      { "name": "indeed", "role": "Software Developer", "location": "Chennai" },
+      { "name": "indeed", "role": "Software Developer", "location": "Mumbai" },
+      { "name": "indeed", "role": "Software Developer", "location": "Delhi" },
+      { "name": "indeed", "role": "Software Developer", "location": "Kolkata" },
+      { "name": "indeed", "role": "Software Developer", "location": "Gurgaon" },
+      { "name": "indeed", "role": "Software Developer", "location": "Noida" },
+      { "name": "indeed", "role": "Software Developer", "location": "Ahmedabad" },
+      { "name": "linkedin", "role": "Software Developer", "location": "Bangalore" },
+      { "name": "linkedin", "role": "Software Developer", "location": "Hyderabad" },
+      { "name": "linkedin", "role": "Software Developer", "location": "Pune" },
+      { "name": "linkedin", "role": "Software Developer", "location": "Chennai" },
+      { "name": "linkedin", "role": "Software Developer", "location": "Mumbai" },
+      { "name": "linkedin", "role": "Software Developer", "location": "Delhi" }
     ]
   }
 }
