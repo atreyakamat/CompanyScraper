@@ -15,6 +15,8 @@ async function scrape(role = '', location = '', fileName = 'indeed_jobs.csv') {
   });
   const page = await context.newPage();
 
+  let jobs = [];
+  
   try {
     await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
     
@@ -23,7 +25,7 @@ async function scrape(role = '', location = '', fileName = 'indeed_jobs.csv') {
       console.log('[Indeed] No listings found or hit bot detection wall.');
     });
 
-    const jobs = await page.$$eval('td.resultContent', (elements) => {
+    jobs = await page.$$eval('td.resultContent', (elements) => {
       return elements.map(el => {
         const titleEl = el.querySelector('h2.jobTitle span');
         const companyEl = el.querySelector('[data-testid="company-name"]');
@@ -65,6 +67,8 @@ async function scrape(role = '', location = '', fileName = 'indeed_jobs.csv') {
   } finally {
     await browser.close();
   }
+  
+  return jobs;
 }
 
 module.exports = { scrape };

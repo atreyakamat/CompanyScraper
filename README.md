@@ -1,67 +1,92 @@
-# Company Scraper Framework 2.6 (Intelligence Edition)
+# Company Scraper 3.0 - AI Auto-Apply Edition 🤖
 
-A modular, production-grade market intelligence platform for scraping, visualizing, and monitoring job and company data with high-end stealth and automation. Now featuring **Intelligent Email Fetching**.
+A powerful job scraping platform with **AI-powered auto-apply** capabilities. Scrape jobs from Indeed, LinkedIn, and StartupGoa, store them in a database, and automatically apply using an Ollama-powered AI agent.
 
-## 🚀 Pro Platform Features
-- **Intelligent Email Fetching:** Automatically finds and enriches company contact details using AI-driven search.
-- **Automated City Scrapes:** One-click automation for primary hubs (Pune, Hyderabad, Bengaluru).
-- **Interactive Menu:** Quick-access CLI menu for selecting roles and locations.
-- **Modern Dashboard:** Built with Next.js, Tailwind, and Recharts for real-time market visualization.
-- **Stealth Mode:** Advanced bot evasion using `playwright-extra` and stealth plugins.
-- **Data Quality:** Automatic date parsing and deduplication for clean lead generation.
+## 🚀 Key Features
 
-## 🛠️ Installation & Setup
+### NEW in v3.0
+- **🤖 AI Auto-Apply:** Automatically fill job application forms using Ollama AI (qwen2.5)
+- **📊 SQLite Database:** Store and track all scraped jobs
+- **👤 Profile Management:** Save your details once, apply to hundreds of jobs
+- **🧠 Smart Form Filling:** AI learns from your inputs and remembers answers
+- **📝 Application Tracking:** See which jobs you've applied to
 
-### 1. Local Environment
+### Existing Features
+- **Stealth Scraping:** Advanced bot evasion using playwright-extra
+- **Multi-Source:** Indeed, LinkedIn, StartupGoa support
+- **Cron Scheduling:** Automated daily scrapes across all Indian cities
+- **Dashboard:** Next.js visualization for market insights
+
+## 📦 Quick Start
+
+### 1. Setup (One-time)
 ```bash
-# Install core dependencies
-npm install
-
-# Install dashboard dependencies
-cd dashboard && npm install && cd ..
-
-# Install scraping browser
-npx playwright install chromium
+# Run the setup script - creates all files and installs dependencies
+node setup.js
 ```
 
-### 2. Docker
+This will:
+- Create project directories (db/, profile/, agent/, apply/)
+- Write all module files
+- Install dependencies (better-sqlite3, axios)
+- Check for Ollama and pull the AI model
+
+### 2. Set Up Your Profile
 ```bash
-docker build -t companyscraper .
-docker run -v ${PWD}:/usr/src/app companyscraper auto
+node index.js profile
+```
+Enter your details: name, email, phone, skills, resume path, etc.
+
+### 3. Scrape Jobs
+```bash
+# Single location
+node index.js scrape -s indeed -l Bangalore --db
+
+# All Indian cities (auto mode)
+node index.js auto --db
 ```
 
-## 🖥️ Running the Platform
-
-### 🤖 Automated Scrape & Intelligence (New)
-Run the fully automated cycle for Pune, Hyderabad, and Bengaluru.
+### 4. Auto-Apply 🎯
 ```bash
-node index.js auto --role "Software Developer"
+# Apply to jobs using AI
+node index.js apply
+
+# Options
+node index.js apply --limit 10      # Apply to 10 jobs
+node index.js apply --dry-run       # Preview without submitting
+node index.js apply --headless      # Run browser in background
 ```
 
-### 📱 Interactive Menu (New)
-Select from common locations and roles via a guided CLI interface.
-```bash
-node index.js menu
-```
+## 🛠️ Commands Reference
 
-### 📊 Launch the Intelligence Dashboard
-Visualize your data, track top hiring locations, and search listings.
-```bash
-npm run dashboard
-# Open http://localhost:3000
-```
+| Command | Description |
+|---------|-------------|
+| `npm run setup` | Initial project setup |
+| `npm run profile` | Set up your profile |
+| `npm run scrape` | Scrape jobs |
+| `npm run auto` | Scrape all Indian cities |
+| `npm run apply` | Auto-apply to jobs |
+| `npm run jobs` | View scraped jobs |
+| `npm run scheduler` | Run cron scheduler |
+| `npm run dashboard` | Launch web dashboard |
 
-### 🔍 Manual CLI Scrapes
-```bash
-# General Syntax
-node index.js scrape -s [source] -r "[role]" -l "[location]"
+## 🤖 AI Agent (Ollama)
 
-# Examples
-node index.js scrape -s indeed -r "Frontend Developer" -l "Pune"
-```
+The auto-apply feature uses Ollama with the `qwen2.5:0.5b` model. 
 
-## ⚙️ Configuration (`config.json`)
-Manage your automated monitoring toggles and search parameters:
+### Install Ollama
+1. Download from: https://ollama.ai
+2. Run: `ollama pull qwen2.5:0.5b`
+3. Start: `ollama serve`
+
+The AI will:
+- Map form fields to your profile data
+- Ask you for unknown fields and remember answers
+- Generate cover letters from your template
+
+## ⚙️ Configuration
+
+### config.json
 ```json
 {
   "scheduler": {
@@ -69,20 +94,71 @@ Manage your automated monitoring toggles and search parameters:
     "schedule": "0 9 * * *",
     "sources": [
       { "name": "indeed", "role": "Software Developer", "location": "Bangalore" },
-      { "name": "indeed", "role": "Software Developer", "location": "Hyderabad" }
+      { "name": "indeed", "role": "Software Developer", "location": "Hyderabad" },
+      { "name": "linkedin", "role": "Software Developer", "location": "Mumbai" }
     ]
   }
 }
 ```
 
-## 🔍 Supported Sources Status
+### Environment Variables
+```bash
+OLLAMA_URL=http://localhost:11434  # Ollama server URL
+OLLAMA_MODEL=qwen2.5:0.5b          # AI model to use
+```
 
-| Source | Status | Features |
-|--------|--------|----------|
-| **Indeed** | ✅ Fully Operational | Indian Market specialization + Email Fetching |
-| **Startup Goa** | ✅ Fully Operational | Full expansion + Company Profile Links |
-| **LinkedIn** | ✅ Operational (Guest) | Stealth public search (Pune, Bangalore, etc.) |
+## 📊 Database Schema
 
-## 🛠️ Developer Guide
-1. **Adding Sources:** Create a script in `scrapers/`, implement `scrape(role, location, fileName)`, and register in `index.js`.
-2. **Email Intelligence:** The `email` field is populated by the intelligence layer; ensure your scraper includes this field in the CSV header.
+Jobs are stored in SQLite (`data/jobs.db`):
+- `jobs` - Scraped job listings
+- `user_profile` - Your profile data
+- `applications` - Application history
+- `ai_memory` - AI learned responses
+
+## 🔍 Supported Sources
+
+| Source | Status | Auto-Apply Support |
+|--------|--------|-------------------|
+| Indeed | ✅ Full | ✅ Yes |
+| LinkedIn | ✅ Guest | ⚠️ Limited (login wall) |
+| StartupGoa | ✅ Full | ✅ Yes |
+
+## 📁 Project Structure
+
+```
+CompanyScraper/
+├── index.js           # Main CLI
+├── setup.js           # Setup script (run first!)
+├── scheduler.js       # Cron job scheduler
+├── config.json        # Configuration
+├── scrapers/          # Job scrapers
+│   ├── indeed.js
+│   ├── linkedin.js
+│   └── startupgoa.js
+├── db/                # Database (created by setup)
+│   └── database.js
+├── profile/           # Profile management
+│   └── profile.js
+├── agent/             # AI agent
+│   └── ollama-agent.js
+├── apply/             # Auto-apply engine
+│   └── auto-apply.js
+└── data/              # SQLite database files
+    └── jobs.db
+```
+
+## ⚠️ Important Notes
+
+1. **Run setup.js first** - This creates all necessary files and directories
+2. **Ollama must be running** for AI features: `ollama serve`
+3. **Resume PDF** - Set your resume path in profile for auto-upload
+4. **Review before submit** - Auto-apply asks for confirmation before submitting
+
+## 🔒 Privacy
+
+- All data stored locally in SQLite
+- No data sent to external servers (except Ollama for AI)
+- Profile data used only for form filling
+
+## License
+ISC

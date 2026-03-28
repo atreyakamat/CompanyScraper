@@ -23,6 +23,7 @@ async function scrape(role = '', fileName = 'startupgoa_jobs.csv') {
   });
 
   const page = await context.newPage();
+  let uniqueJobs = [];
 
   try {
     await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
@@ -55,7 +56,6 @@ async function scrape(role = '', fileName = 'startupgoa_jobs.csv') {
     });
 
     // Data Quality: Deduplication and Date Parsing
-    const uniqueJobs = [];
     const seenLinks = new Set();
 
     for (const job of rawJobs) {
@@ -90,6 +90,8 @@ async function scrape(role = '', fileName = 'startupgoa_jobs.csv') {
   } finally {
     await browser.close();
   }
+  
+  return uniqueJobs;
 }
 
 module.exports = { scrape };

@@ -15,6 +15,8 @@ async function scrape(role = '', location = '', fileName = 'linkedin_jobs.csv') 
   });
   const page = await context.newPage();
 
+  let jobs = [];
+  
   try {
     await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
     
@@ -30,7 +32,7 @@ async function scrape(role = '', location = '', fileName = 'linkedin_jobs.csv') 
       await page.waitForTimeout(1000);
     }
 
-    const jobs = await page.$$eval('.base-search-card', (elements) => {
+    jobs = await page.$$eval('.base-search-card', (elements) => {
       return elements.map(el => ({
         title: el.querySelector('.base-search-card__title')?.innerText.trim() || 'N/A',
         company: el.querySelector('.base-search-card__subtitle a')?.innerText.trim() || 'N/A',
@@ -65,6 +67,8 @@ async function scrape(role = '', location = '', fileName = 'linkedin_jobs.csv') 
   } finally {
     await browser.close();
   }
+  
+  return jobs;
 }
 
 module.exports = { scrape };
