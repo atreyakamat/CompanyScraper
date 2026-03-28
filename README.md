@@ -5,7 +5,7 @@ A powerful job scraping platform with **AI-powered auto-apply** capabilities. Sc
 ## 🚀 Key Features
 
 ### NEW in v3.0
-- **🤖 AI Auto-Apply:** Automatically fill job application forms using Ollama AI (qwen2.5)
+- **🤖 AI Auto-Apply:** Automatically fill job application forms using Ollama AI (qwen3)
 - **📊 SQLite Database:** Store and track all scraped jobs
 - **👤 Profile Management:** Save your details once, apply to hundreds of jobs
 - **🧠 Smart Form Filling:** AI learns from your inputs and remembers answers
@@ -72,11 +72,11 @@ node index.js apply --headless      # Run browser in background
 
 ## 🤖 AI Agent (Ollama)
 
-The auto-apply feature uses Ollama with the `qwen2.5:0.5b` model. 
+The auto-apply feature uses Ollama with the `qwen3:0.6b` model. 
 
 ### Install Ollama
 1. Download from: https://ollama.ai
-2. Run: `ollama pull qwen2.5:0.5b`
+2. Run: `ollama pull qwen3:0.6b`
 3. Start: `ollama serve`
 
 The AI will:
@@ -104,7 +104,7 @@ The AI will:
 ### Environment Variables
 ```bash
 OLLAMA_URL=http://localhost:11434  # Ollama server URL
-OLLAMA_MODEL=qwen2.5:0.5b          # AI model to use
+OLLAMA_MODEL=qwen3:0.6b            # AI model to use
 ```
 
 ## 📊 Database Schema

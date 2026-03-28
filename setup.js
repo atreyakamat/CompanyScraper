@@ -230,7 +230,7 @@ let db; try { db = require('../db/database'); } catch(e) {}
 const { getProfile, getFieldValue } = require('../profile/profile');
 
 const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434';
-const MODEL = process.env.OLLAMA_MODEL || 'qwen2.5:0.5b';
+const MODEL = process.env.OLLAMA_MODEL || 'qwen3:0.6b';
 
 async function checkOllama() {
   try {
@@ -529,12 +529,12 @@ try {
 }
 
 if (ollamaInstalled) {
-  console.log('\n[5/5] Pulling AI model (qwen2.5:0.5b)...');
+  console.log('\n[5/5] Pulling AI model (qwen3:0.6b)...');
   try {
-    execSync('ollama pull qwen2.5:0.5b', { stdio: 'inherit' });
+    execSync('ollama pull qwen3:0.6b', { stdio: 'inherit' });
     console.log('  ✓ Model ready');
   } catch (e) {
-    console.log('  ⚠ Run manually: ollama pull qwen2.5:0.5b');
+    console.log('  ⚠ Run manually: ollama pull qwen3:0.6b');
   }
 } else {
   console.log('\n[5/5] Skipped model pull (Ollama not installed)');
