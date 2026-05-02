@@ -53,11 +53,11 @@ db.exec(`
 const jobOps = {
   insert: db.prepare(`INSERT OR IGNORE INTO jobs (title, company, location, job_type, date_posted, job_link, source, description, company_email, salary) VALUES (@title, @company, @location, @job_type, @date_posted, @job_link, @source, @description, @company_email, @salary)`),
   getAll: db.prepare('SELECT * FROM jobs ORDER BY scraped_at DESC'),
-  getNew: db.prepare("SELECT * FROM jobs WHERE applied = 0 AND status = 'new' ORDER BY scraped_at DESC"),
+  getNew: db.prepare(`SELECT * FROM jobs WHERE applied = 0 AND status = 'new' ORDER BY scraped_at DESC`),
   getById: db.prepare('SELECT * FROM jobs WHERE id = ?'),
-  markApplied: db.prepare("UPDATE jobs SET applied = 1, applied_at = CURRENT_TIMESTAMP, status = 'applied' WHERE id = ?"),
+  markApplied: db.prepare(`UPDATE jobs SET applied = 1, applied_at = CURRENT_TIMESTAMP, status = 'applied' WHERE id = ?`),
   count: db.prepare('SELECT COUNT(*) as count FROM jobs'),
-  countNew: db.prepare("SELECT COUNT(*) as count FROM jobs WHERE applied = 0 AND status = 'new'"),
+  countNew: db.prepare(`SELECT COUNT(*) as count FROM jobs WHERE applied = 0 AND status = 'new'`),
 };
 
 const profileOps = {

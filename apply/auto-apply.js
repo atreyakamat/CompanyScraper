@@ -12,7 +12,7 @@ async function askUser(question) {
   return new Promise(r => rl.question(`\n❓ ${question}: `, ans => { rl.close(); r(ans); }));
 }
 
-async function fillField(page, field, profile, options = {}) {
+async function fillField(page, field, profile) {
   const { name, type, id, placeholder } = field;
   const selector = id ? `#${id}` : `[name="${name}"]`;
   
@@ -26,17 +26,10 @@ async function fillField(page, field, profile, options = {}) {
       return label.trim();
     }, selector);
 
-    // Skip if it's already filled or not actionable
-    if (type === 'hidden') return false;
-
     // Check AI memory first
     const remembered = await recallAnswer(label || name);
     if (remembered) {
-      if (type === 'checkbox') {
-        if (remembered === 'true' || remembered === 'y' || remembered === 'yes') await el.check();
-      } else {
-        await el.fill(remembered);
-      }
+      await el.fill(remembered);
       console.log(`  ✓ ${name}: ${remembered} (remembered)`);
       return true;
     }
@@ -45,10 +38,8 @@ async function fillField(page, field, profile, options = {}) {
     const result = await analyzeFormField({ name, type, label, placeholder });
     
     if (result.value) {
-      if (type === 'file') {
+      if (type === 'file' && result.value) {
         await el.setInputFiles(result.value);
-      } else if (type === 'checkbox') {
-        await el.check();
       } else {
         await el.fill(String(result.value));
       }
@@ -56,26 +47,10 @@ async function fillField(page, field, profile, options = {}) {
       return true;
     }
     
-    // In dry run, don't block for input
-    if (options.dryRun) {
-      const defaultVal = type === 'checkbox' ? 'true' : 'N/A';
-      if (type === 'checkbox') {
-        try { await el.check(); } catch(e) {}
-      } else {
-        try { await el.fill(defaultVal); } catch(e) {}
-      }
-      console.log(`  ✓ ${name}: ${defaultVal} (dry-run default)`);
-      return true;
-    }
-
     // Need user input
     const userValue = await askUser(`Enter value for "${label || name}"`);
     if (userValue) {
-      if (type === 'checkbox') {
-        if (userValue.toLowerCase() === 'y' || userValue.toLowerCase() === 'yes') await el.check();
-      } else {
-        await el.fill(userValue);
-      }
+      await el.fill(userValue);
       await rememberAnswer(label || name, userValue, 'form_field');
       console.log(`  ✓ ${name}: ${userValue} (user + saved)`);
       return true;
@@ -121,24 +96,19 @@ async function applyToJob(job, options = {}) {
     // Find all form fields
     const fields = await page.evaluate(() => {
       const inputs = document.querySelectorAll('input, textarea, select');
-      return Array.from(inputs).map(el => {
-        const style = window.getComputedStyle(el);
-        const rect = el.getBoundingClientRect();
-        return {
-          name: el.name || el.id,
-          type: el.type,
-          id: el.id,
-          placeholder: el.placeholder,
-          required: el.required,
-          visible: style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0
-        };
-      }).filter(f => f.name && f.visible && f.type !== 'hidden');
+      return Array.from(inputs).map(el => ({
+        name: el.name || el.id,
+        type: el.type,
+        id: el.id,
+        placeholder: el.placeholder,
+        required: el.required
+      })).filter(f => f.name);
     });
 
     console.log(`\n📝 Found ${fields.length} form fields`);
 
     for (const field of fields) {
-      await fillField(page, field, profile, options);
+      await fillField(page, field, profile);
     }
 
     // Handle file uploads (resume)
